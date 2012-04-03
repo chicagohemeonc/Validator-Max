@@ -1,0 +1,37 @@
+PYTHON_INCLUDE=/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7
+
+
+all: PeptideFragmentSingleton.so
+
+# build my C library
+libpeptidefragmentsingleton.so: peptide_fragment.o compute_pI.o 
+	gcc -shared -lstdc++ -o libpeptidefragmentsingleton.so peptide_fragment.o compute_pI.o 
+
+peptide_fragment.o: peptide_fragment.hpp peptide_fragment.cpp
+	gcc -O2 -fPIC -c -o peptide_fragment.o peptide_fragment.cpp
+
+compute_pI.o: compute_pI.c
+	gcc -O2 -fPIC -c -o compute_pI.o compute_pI.c
+
+# generate the binding code
+peptide_fragment-binding.cpp: peptide_fragment.hpp peptide_fragment.py
+	PYTHONPATH=$$PYTHONPATH python peptide_fragment.py > peptide_fragment-binding.cpp
+
+# build the binding code
+peptide_fragment-binding.o: peptide_fragment-binding.cpp
+	gcc -O3 -fPIC -I$(PYTHON_INCLUDE) -c -o peptide_fragment-binding.o peptide_fragment-binding.cpp
+
+# build the final python module
+PeptideFragmentSingleton.so: libpeptidefragmentsingleton.so peptide_fragment-binding.o compute_pI.o  
+	gcc -shared -lstdc++ -o PeptideFragmentSingleton.so -L. -lpeptidefragmentsingleton -framework Python peptide_fragment-binding.o compute_pI.o
+
+test: PeptideFragmentSingleton.so
+	@python test.py
+
+# C++-only test; useful for profiling with gcov (see Makefile.proflie)
+ctest: test.cpp libpeptidefragmentsingleton.so
+	gcc -O2 -fPIC -I/opt/local/include -lstdc++ -L. -lpeptidefragmentsingleton -o ctest test.cpp
+	@chmod a+x ctest
+
+clean:
+	rm -rf ctest *.o *.so *.gch *.gcov *.gcno *.gcda *.dSYM gmon.out peptide_fragment-binding.cpp *~ 2>/dev/null

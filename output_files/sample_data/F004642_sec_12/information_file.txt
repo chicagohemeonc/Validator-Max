@@ -1,0 +1,14 @@
+ppm cutoff: 10
+scan width: 100
+ms2_ppm_tolerance: 1000
+min_ion_percent_intensity: 0.01
+max_ion_difference: 1000.0
+
+Number of unique queries: 5306
+Number of unique pairs: 5585
+Number of pairs where peptides are same: 502
+Number pairs with matched peptides: 502 (Unique = 374)
+Number pairs with mismatched peptides: 5083 (Unique = 4701)
+Number pairs with matched proteins: 502 (Unique = 254)
+Number pairs with mismatched proteins: 5083 (Unique = 4701)
+Number of queries where any proteins matched: 507
