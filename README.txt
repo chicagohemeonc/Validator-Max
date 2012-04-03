@@ -68,6 +68,13 @@ AllMatch
 HLRecover
 MascotMatch
 
+ALTERNATIVE
+
+The software stack can also be run with all of the file parameters provided on the command line. To see the command line options run:
+
+$ python validator_cli.py --help
+
+By default validator_cli.py only Validator runs. If you include a CPAS/Peptide Prophet file as a parameter validator_cli.py will also run Crossref, Quant, and Validator Parse
 
 
 
