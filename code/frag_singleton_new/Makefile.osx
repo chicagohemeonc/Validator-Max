@@ -4,14 +4,11 @@ PYTHON_INCLUDE=/Library/Frameworks/Python.framework/Versions/2.7/include/python2
 all: PeptideFragmentSingleton.so
 
 # build my C library
-libpeptidefragmentsingleton.so: peptide_fragment.o compute_pI.o 
-	gcc -shared -lstdc++ -o libpeptidefragmentsingleton.so peptide_fragment.o compute_pI.o 
+libpeptidefragmentsingleton.so: peptide_fragment.o
+	gcc -shared -lstdc++ -o libpeptidefragmentsingleton.so peptide_fragment.o
 
 peptide_fragment.o: peptide_fragment.hpp peptide_fragment.cpp
 	gcc -O2 -fPIC -c -o peptide_fragment.o peptide_fragment.cpp
-
-compute_pI.o: compute_pI.c
-	gcc -O2 -fPIC -c -o compute_pI.o compute_pI.c
 
 # generate the binding code
 peptide_fragment-binding.cpp: peptide_fragment.hpp peptide_fragment.py
@@ -22,8 +19,8 @@ peptide_fragment-binding.o: peptide_fragment-binding.cpp
 	gcc -O3 -fPIC -I$(PYTHON_INCLUDE) -c -o peptide_fragment-binding.o peptide_fragment-binding.cpp
 
 # build the final python module
-PeptideFragmentSingleton.so: libpeptidefragmentsingleton.so peptide_fragment-binding.o compute_pI.o  
-	gcc -shared -lstdc++ -o PeptideFragmentSingleton.so -L. -lpeptidefragmentsingleton -framework Python peptide_fragment-binding.o compute_pI.o
+PeptideFragmentSingleton.so: libpeptidefragmentsingleton.so peptide_fragment-binding.o
+	gcc -shared -lstdc++ -o PeptideFragmentSingleton.so -L. -lpeptidefragmentsingleton -framework Python peptide_fragment-binding.o
 
 test: PeptideFragmentSingleton.so
 	@python test.py

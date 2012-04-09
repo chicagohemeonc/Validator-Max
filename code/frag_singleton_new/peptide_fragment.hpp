@@ -5,8 +5,6 @@
 #include <list>
 using namespace std;
 
-extern "C" double compute_pI(char *seq, unsigned long seq_length, int charge_increment);
-
 #define SAMPLEPEPTIDE "DIGSESTEDQAMEDIK"
 #define MAX_SEQUENCE 100000
 #define MAX_CHARGE   10
@@ -32,10 +30,13 @@ public:
   string sequence ( void ) const;
   virtual ListD a_ions ( void );
   virtual ListD b_ions ( void );
+  virtual ListD c_ions ( void );
+  virtual ListD x_ions ( void );
   virtual ListD y_ions ( void );
+  virtual ListD z_ions ( void );
+  virtual ListD zdot_ions ( void );
   virtual ListD peptide_mass ( void );
   virtual string composition ( void );
-  virtual double pI ( void );
   ListD a;
   ListD b;
   ListD c;
@@ -49,17 +50,21 @@ private:
   /* parameter values */
   char _szInputSequence[MAX_SEQUENCE];
   unsigned int _iLenPeptide;
-  unsigned _iMassType; /*
+  unsigned int _iMassType; /*
                    * bMassType=0 for average masses
                    * bMassType=1 for monoisotopic masses
                    */
   int _iCharge;          /* ion charge */
   string _modification;  /* specifies which residues are modified and how */
+  std::list<int> _modifiedPos; /* remembers modified positions in the sequence, so they can be reset */
 
   /* work variables */
   double pdMassAA[128];
+  double pdMassAA_template[128];
   double pdPositionMod[MAX_SEQUENCE];
   double dPepMass;
+  double dNterm;
+  double dCterm;
 
   int piCompC[128];
   int piCompH[128];
@@ -69,6 +74,7 @@ private:
 
   /* private methods */
   void _initialize_mass ( void );
+  void _copy_mass ( void );
   void _init_comp ( void );
 };
 

@@ -14,13 +14,8 @@ int main () {
   f.analyze(const_cast<char *>("ACKRM"), 3, const_cast<char *>("16.0@M 57.1@3"));
 
   cout << f.sequence() << ": " << f.composition() << endl;
-  cout << "---- pI: ---- " << endl;
-  cout << "  " << f.pI() << endl;
 
   cout << "---- b-ions: ---- " << endl;
-  // l = f.b_ions();
-  //for i, m in enumerate(l):
-  //    print "  ", m
   list = f.b_ions();
   for ( el = list.begin(); el != list.end(); el++ ) {
     cout << " " << *el << endl;
@@ -43,9 +38,6 @@ int main () {
   // f.analyze('KC')
   f.analyze(const_cast<char *>("KC"), 1, const_cast<char *>(""));
   cout << f.sequence() << ": " << f.composition() << endl;
-
-  cout << "---- pI: ---- " << endl;
-  cout << "  " << f.pI() << endl;
 
   cout << "---- b-ions: ---- " << endl;
   // l = f.b_ions();
