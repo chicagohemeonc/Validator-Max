@@ -21,8 +21,9 @@ peptide_fragment-binding.o: peptide_fragment-binding.cpp
 PeptideFragmentSingleton.so: libpeptidefragmentsingleton.so peptide_fragment-binding.o
 	g++ -m64 -shared -Wall -fPIC -Wl,-no-undefined -o PeptideFragmentSingleton.so peptide_fragment-binding.o -L. -lpeptidefragmentsingleton -lpython2.7
 
-test: test.cpp libpeptidefragmentsingleton.so
+test: test.cpp test-multiple.cpp libpeptidefragmentsingleton.so
 	g++ -o test test.cpp -L. -lpeptidefragmentsingleton
+	g++ -o test-multiple test-multiple.cpp -L. -lpeptidefragmentsingleton
 
 clean:
-	rm -f test *.o *.so *.gch peptide_fragment-binding.cpp *~ *# *2>/dev/null
+	rm -f test test-multiple *.o *.so *.gch peptide_fragment-binding.c* *~ *# *2>/dev/null

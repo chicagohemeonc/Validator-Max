@@ -1,6 +1,7 @@
 PYTHON_INCLUDE=/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7
 
-all: PeptideFragmentSingleton.so test
+
+all: PeptideFragmentSingleton.so
 
 # build my C library
 libpeptidefragmentsingleton.so: peptide_fragment.o
@@ -28,10 +29,11 @@ test: PeptideFragmentSingleton.so
 #   make -f Makefile.profile ctest
 #   time ./ctest > /dev/null
 #   gcov peptide_fragment.cpp
-#   less peptide_fragment.cpp.gcov 
+#   less peptide_fragment.cpp.gcov
 ctest: test.cpp libpeptidefragmentsingleton.so
 	gcc -g -O2 -fPIC -I/opt/local/include -lstdc++ -L/opt/local/lib -L. -lpeptidefragmentsingleton -lgcov -o ctest test.cpp -pg -fprofile-arcs -ftest-coverage
 	@chmod a+x ctest
 
 clean:
-	rm -rf ctest *.o *.so *.gch *.gcov *.gcno *.gcda *.dSYM gmon.out peptide_fragment-binding.cpp *~ 2>/dev/null
+	rm -rf ctest *.o *.so *.gch *.gcov *.gcno *.gcda *.dSYM gmon.out peptide_fragment-binding.c* *~ 2>/dev/null
+

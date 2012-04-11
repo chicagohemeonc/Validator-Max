@@ -5,10 +5,10 @@ all: PeptideFragmentSingleton.so
 
 # build my C library
 libpeptidefragmentsingleton.so: peptide_fragment.o
-	gcc -shared -lstdc++ -o libpeptidefragmentsingleton.so peptide_fragment.o
+	gcc -arch i386 -shared -lstdc++ -o libpeptidefragmentsingleton.so peptide_fragment.o
 
 peptide_fragment.o: peptide_fragment.hpp peptide_fragment.cpp
-	gcc -O2 -fPIC -c -o peptide_fragment.o peptide_fragment.cpp
+	gcc -arch i386 -fPIC -c -o peptide_fragment.o peptide_fragment.cpp
 
 # generate the binding code
 peptide_fragment-binding.cpp: peptide_fragment.hpp peptide_fragment.py
@@ -16,18 +16,18 @@ peptide_fragment-binding.cpp: peptide_fragment.hpp peptide_fragment.py
 
 # build the binding code
 peptide_fragment-binding.o: peptide_fragment-binding.cpp
-	gcc -O3 -fPIC -I$(PYTHON_INCLUDE) -c -o peptide_fragment-binding.o peptide_fragment-binding.cpp
+	gcc  -arch i386 -fPIC -I$(PYTHON_INCLUDE) -c -o peptide_fragment-binding.o peptide_fragment-binding.cpp
 
 # build the final python module
 PeptideFragmentSingleton.so: libpeptidefragmentsingleton.so peptide_fragment-binding.o
-	gcc -shared -lstdc++ -o PeptideFragmentSingleton.so -L. -lpeptidefragmentsingleton -framework Python peptide_fragment-binding.o
+	gcc  -arch i386 -shared -lstdc++ -o PeptideFragmentSingleton.so -L. -lpeptidefragmentsingleton -framework Python peptide_fragment-binding.o compute_pI.o
 
 test: PeptideFragmentSingleton.so
 	@python test.py
 
 # C++-only test; useful for profiling with gcov (see Makefile.proflie)
 ctest: test.cpp libpeptidefragmentsingleton.so
-	gcc -O2 -fPIC -I/opt/local/include -lstdc++ -L. -lpeptidefragmentsingleton -o ctest test.cpp
+	gcc -arch i386 -O2 -fPIC -I/opt/local/include -lstdc++ -L. -lpeptidefragmentsingleton -o ctest test.cpp
 	@chmod a+x ctest
 
 clean:
