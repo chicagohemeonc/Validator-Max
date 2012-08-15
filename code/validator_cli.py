@@ -24,7 +24,6 @@ import time
 from PeptideFragmentSingleton import PeptideFragment 
 import bisect
 import os
-os.environ["LD_LIBRARY_PATH"] = os.environ["LD_LIBRARY_PATH"] + ":" + "."
 import itertools # built in to 2.6
 from xlwt import Workbook,Style,easyxf # get these from http://www.python-excel.org/
 from math import trunc
