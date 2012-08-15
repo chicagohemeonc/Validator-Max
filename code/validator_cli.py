@@ -1,20 +1,39 @@
+####
+#Copyright 2011 Samuel Volchenboum, Jonathan Goya, Gene Selkov, Chaim Kirby, 
+#
+#This file is part of Validator.
+#
+#Validator is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.
+#
+#Validator is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License
+#along with Validator.  If not, see <http://www.gnu.org/licenses/>.
+#####
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
-# by Samuel Volchenboum
 
 import sys
 import cPickle
 import time
-from PeptideFragmentSingleton import PeptideFragment # from Gene Selkov
+from PeptideFragmentSingleton import PeptideFragment 
 import bisect
 import os
 os.environ["LD_LIBRARY_PATH"] = os.environ["LD_LIBRARY_PATH"] + ":" + "."
 import itertools # built in to 2.6
 from xlwt import Workbook,Style,easyxf # get these from http://www.python-excel.org/
 from math import trunc
-#from padnums import pprint_table
 import argparse
 import subprocess
+try:
+	from padnums import pprint_table
+except:
+	pass
 
 parser = argparse.ArgumentParser()
 
@@ -1750,11 +1769,6 @@ def main(pickled = False):
 	global isotope_masses
 	global mod_dict
 	current_dir = os.getcwd()
-	#if not os.path.exists(current_dir + '/../' + 'output_files/'+data_folder):
-	#	os.mkdir(current_dir + '/../' + 'output_files/'+data_folder)
-        
-
-#	filenames = [current_dir + '/../data/' + data_folder +'/'+a for a in os.listdir(current_dir + '/../data/' + data_folder) if a[0] <> "."]
 
 	filenames = [input_file]
 	for filename in filenames:
@@ -1764,10 +1778,6 @@ def main(pickled = False):
 		dirname = os.path.dirname(filename)
 		if not os.path.exists(dirname):
 			os.makedirs(dirname)
- 		#f = filename.split('/')[-1]
-		#if not os.path.exists(current_dir + '/../' + 'output_files/'+ data_folder + '/' + f.split('.')[0]):
-		#	os.mkdir(current_dir + '/../'  + 'output_files/'+data_folder + '/' + f.split('.')[0])
-		#os.chdir(current_dir + '/../'  + 'output_files/'+data_folder + '/'  + f.split('.')[0])
 		new_data = []
 		# load in the whole .DAT file
 		for line in data:
