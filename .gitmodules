@@ -1,0 +1,3 @@
+[submodule "code/fragment-singleton"]
+	path = code/fragment-singleton
+	url = git@github.com:chicagohemeonc/Fragment-Singleton.git

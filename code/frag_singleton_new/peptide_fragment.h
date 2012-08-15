@@ -1,1 +1,0 @@
-void analyze ( char * peptide );
