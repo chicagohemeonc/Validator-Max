@@ -1,0 +1,6 @@
+.project
+.pydevproject
+.settings
+PeptideFragmentSingleton.so
+libpeptidefragmentsingleton.so
+*.pyc
