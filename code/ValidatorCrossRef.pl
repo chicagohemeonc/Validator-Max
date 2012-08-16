@@ -45,10 +45,9 @@ my $valheaderline = <VALIDATOR>;
 chomp($valheaderline);
 #print $valheaderline;
 print "Parsing Validator output ...";	
-my @valheader = split(/,/,$valheaderline);
-
 if ($ARGV[3] eq "Val3")
         {	
+        my @valheader = split(/\t/,$valheaderline);
         #print "########\n";
         #print join ("\n",@valheader);
         for (my $index = 0; $index <=$#valheader; $index ++)
@@ -98,7 +97,7 @@ if ($ARGV[3] eq "Val3")
         }
 elsif ($ARGV[3] eq "Val1")
         {
-	
+		my @valheader = split(/,/,$valheaderline);
         #print "########\n";
         #print join ("\n",@valheader);
 
@@ -223,5 +222,3 @@ foreach my $scan (@scans)
 print "done.\n";
 unlink ("$ARGV[0]_unix");
 unlink ("$ARGV[1]_unix");
-
-				
