@@ -34,12 +34,14 @@ try:
 except:
 	pass
 
+path =  os.path.abspath(os.path.dirname(__file__))+"/../"
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--input-file1', 
 		    action='store', 
                     dest='dat_file', 
-                    default='/home/public/Validator/data/sample_data/F004642_sec_12.dat', 
+                    default=path+'data/sample_data/F004642_sec_12.dat', 
                     help='A string that points to the location of input file')
 
 parser.add_argument('--input-file2',
@@ -76,7 +78,7 @@ parser.add_argument('--max-peak-diff',
 parser.add_argument('--output-folder',
                     action='store',
                     dest='output_folder',
-                    default='/home/public/Validator/output_files/sample_data/F004642_sec_12/',
+                    default=path+'output_files/sample_data/F004642_sec_12/',
                     help='Output folder location')
 
 
@@ -159,13 +161,13 @@ def load_pickle_data(filename):
 	return data
 
 def print_timing(func):
-    def wrapper(*arg):
-        t1 = time.time()
-        res = func(*arg)
-        t2 = time.time()
-        print '%s took %0.3f ms' % (func.func_name, (t2-t1)*1000.0)
-        return res
-    return wrapper
+	def wrapper(*arg):
+		t1 = time.time()
+		res = func(*arg)
+		t2 = time.time()
+		print '%s took %0.3f ms' % (func.func_name, (t2-t1)*1000.0)
+		return res
+	return wrapper
 
 def writefile(output,filename):
 	newfile = open(filename, "w")
@@ -1729,7 +1731,7 @@ def validator_studies():
 		# generate information file
 		saveout = sys.stdout                                     
 		#fsock = open('information_file.txt', 'w')
-                fsock = open(output_txt,'w')                             
+		fsock = open(output_txt,'w')                             
 		sys.stdout = fsock
 		print "ppm cutoff:",ppm_cutoff
 		print "scan width:",scan_width
@@ -1852,15 +1854,18 @@ def main(pickled = False):
 		validator_studies() # runs Validator 1 and 3 and 3e in succession0
 	return
 
-
-
-
-
 main()
 subprocess.call(["perl","ValidatorParse_cli.pl",output_folder, output_folder+"/"+xls_name])
 if not cpas_file == '':
+	#pairs.csv CrossRef and Quant
 	subprocess.call(["perl","ValidatorCrossRef.pl",output_csv, cpas_file, output_folder+"/crossref_pass.txt", "Val1"])
 	subprocess.call(["perl", "HanashQuantRevise.pl", output_folder+"/crossref_pass.txt", "all"])
+	
+	for parse_type in ["MascotMatch", "HLRecover", "AllMatch"]:
+		parse_output = output_folder+"/"+parse_type+"/"
+		subprocess.call(["perl","ValidatorCrossRef.pl",parse_output+xls_name.split(".")[0]+"_"+parse_type+".tsv", cpas_file, parse_output+"crossref_pass.txt", "Val3"])
+		subprocess.call(["perl", "HanashQuantRevise.pl", parse_output+"crossref_pass.txt", "all"])
+	
 
 print "FINISHED"
 
