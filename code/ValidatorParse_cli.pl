@@ -25,8 +25,10 @@ my $filename = $ARGV[1];
 chomp($data_path);
 
 my $path = $data_path."/";
+mkdir "$path/MascotMatch";
+mkdir "$path/HLRecover";
+mkdir "$path/AllMatch";
 
-#{
 chomp $filename;
 print "Analyzing: $filename ...\n";
 my ($iPepH, $iPepL, $iZM, $iIsoModsM, $iMatch, $iBYScore, $iBYScoreLL, $iBYScoreHH, $iProtL, $iProtH);
@@ -35,9 +37,9 @@ my $oExcel = new Spreadsheet::ParseExcel;
 
 $filename =~ /(.+).xls/;
 my $file_core = (split(/\./,(split(/\//, $filename))[-1]))[0];
-my $filename2="$path"."$file_core"."_MascotMatch.tsv";
-my $filename3="$path"."$file_core"."_HLRecover.tsv";
-my $filename4="$path"."$file_core"."_AllMatch.tsv";
+my $filename2="$path/MascotMatch/"."$file_core"."_MascotMatch.tsv";
+my $filename3="$path/HLRecover/"."$file_core"."_HLRecover.tsv";
+my $filename4="$path/AllMatch/"."$file_core"."_AllMatch.tsv";
 open (MASCOTMATCH, ">$filename2");
 open (HLRECOVER, ">$filename3");
 open (ALLMATCH, ">$filename4");
@@ -237,4 +239,3 @@ for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++)
  }
 }
 print "done\n";
-#}
