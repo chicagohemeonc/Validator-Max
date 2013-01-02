@@ -248,10 +248,10 @@ def make_query_dictionary(mass_data,peptide_data,protein_data):
 			
 		output = {}
 		for i in data:
-			if len(i) == 11: # this is a consistency check to make sure that all the MS2 scan data is there. If not, don't bother.				
+			if len(i) > 0: 				
 				key = int(i[0][5:])
 				good_queries.append(key)	
-				val = i[1:10]
+				val = i[1:-1]
 				output.setdefault(key,[]).append(val)
 		return output
 	good_queries = [] 
@@ -282,8 +282,9 @@ def make_query_dictionary(mass_data,peptide_data,protein_data):
 				except KeyError:
 					val.append(["No proteins"])
 				#print key
-				val = q_dict_object(val)
-				output.setdefault(key,[]).append(val)
+				if 'Ions1' in val[2][-1]:
+					val = q_dict_object(val)
+					output.setdefault(key,[]).append(val)
 	return output
 
 def ppm(m1,m2):
@@ -415,7 +416,7 @@ class q_dict_object(list):
 			self.top_calc_mz = 0
 			
 		self.MS2_data = data[2]
-		self.MS2_ions = [[float(b) for b in a.split(':')] for a in data[2][8][6:].split(',')] #.sort(lambda x,y:cmp(x[0],y[0]))
+		self.MS2_ions = [[float(b) for b in a.split(':')] for a in data[2][-1][6:].split(',')] #.sort(lambda x,y:cmp(x[0],y[0]))
 		self.scan_number = scan_number(data)
 class peptide_line_object(list):
 	def __init__(self,data):
@@ -1802,7 +1803,7 @@ def main(pickled = False):
 					aa = 1
 				elif aa == "K":
 					lys_mod = n
-					delta_lys6 = m
+					delta_lys = m
 				elif aa == "R":
 					arg_mod = n
 					delta_arg10 = m
@@ -1813,7 +1814,7 @@ def main(pickled = False):
 			print filename, "not SILAC"
 			continue # with next file in list
 		mods_to_check = [lys_mod, arg_mod]
-		poss_mods = [delta_lys6, delta_arg10]
+		poss_mods = [delta_lys, delta_arg10]
 		MW_test_group = []
 		mod_names = [["LYS",'K'],["ARG","R"]]
 		mod_dict = {} # will print corresponding number for amino acid
